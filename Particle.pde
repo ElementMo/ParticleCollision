@@ -7,6 +7,7 @@ class Particle
   float mass;
   color displayColor;
   float fallRate;
+  int timeCount;
 
   Particle(float x, float y, float mass, color displayColor) 
   {
@@ -17,6 +18,7 @@ class Particle
     this.mass = mass;
     this.displayColor = displayColor;
     this.fallRate = map(this.mass, pMinMass, pMaxMass, 0.03, 0.07);
+    this.timeCount = 0;
   }
 
   void move() 
@@ -33,44 +35,47 @@ class Particle
   {
     boolean hasCollision = false;
 
-    for (int c = 0; c < collisions.size(); c++) {
-      Collision col = collisions.get(c);
+    for (int c = 0; c < 1; c++) {
 
-      float distance = dist(this.pos.x, this.pos.y, col.pos.x, col.pos.y);
-
-      if (distance < col.mass/2) {
+      if (this.pos.y > height - 2) {
         PVector offset = new PVector(this.pos.x, this.pos.y);
-        offset.sub(col.pos);
+        offset.sub(new PVector(this.pos.x, height));
         offset.normalize();
-        offset.mult(col.mass/2-distance);
+        offset.mult(5);
         this.pos.add(offset);
 
-        float friction = 0.3;
+        float friction = 0.19;
         float dampening = map(this.mass, pMinMass, pMaxMass, 1, 0.8);
         float mag = this.vel.mag();
 
-        float magAddition = min(col.mass/2-distance, 15);
+        float magAddition = min(5, 15);
 
         PVector bounce = new PVector(this.pos.x, this.pos.y);
-        bounce.sub(col.pos);
+        bounce.sub(new PVector(this.pos.x, height));
         bounce.normalize();
         bounce.mult((mag+magAddition)*friction*dampening);
         this.vel = bounce;
 
-        if (this.mass > 2) {
-          this.mass = max(1, this.mass-2);
+        if (this.mass > 5) {
+          //this.mass = max(1, this.mass);
 
           for (int s = 0; s < splitCount; s++) {
-            float mass = max(1, this.mass-1)*2;
-            color displayColor = color(255, 200);
+            //float mass = max(2, this.mass-1);
+            color displayColor = color(random(130, 200), 360, 360, 360);
 
-            Particle splash = new Particle(this.pos.x, this.pos.y, mass, displayColor);
+            Particle splash = new Particle(this.pos.x, this.pos.y, 5, displayColor);
+            Particle splash2 = new Particle(this.pos.x, this.pos.y, 3, color(340));
 
             splash.vel = new PVector(this.vel.x, this.vel.y);
-            splash.vel.rotate(radians(random(-45, 45)));
-            splash.vel.mult(random(0.6, 0.9));
+            splash.vel.rotate(radians(random(-40, 40)));
+            splash.vel.mult(random(0.3, 0.8));
+
+            splash2.vel = new PVector(this.vel.x, this.vel.y);
+            splash2.vel.rotate(radians(random(-40, 40)));
+            splash2.vel.mult(random(0.3, 0.5));
 
             particles.add(splash);
+            particles.add(splash2);
           }
         }
 
@@ -83,12 +88,20 @@ class Particle
     return hasCollision;
   }
 
+  boolean deadTime()
+  {
+    if (timeCount > 10)
+    {
+      return true;
+    } else return false;
+  }
+
   void display() 
   {
-
     strokeWeight(this.mass);
     stroke(displayColor);
     line(this.pOld.x, this.pOld.y, this.pos.x, this.pos.y);
     pOld.set(pos);
+    timeCount ++;
   }
 }

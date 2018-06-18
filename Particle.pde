@@ -44,7 +44,7 @@ class Particle
         offset.mult(5);
         this.pos.add(offset);
 
-        float friction = 0.19;
+        float friction = 0.26;
         float dampening = map(this.mass, pMinMass, pMaxMass, 1, 0.8);
         float mag = this.vel.mag();
 

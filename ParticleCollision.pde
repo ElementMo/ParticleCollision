@@ -6,8 +6,9 @@ PeasyCam cam;
 
 int spawnCount;
 int splitCount = 10;
+int offsetY = 0;
 
-float pMinMass = 3;
+float pMinMass = 3.5;
 float pMaxMass = 6;
 float waterfallSize = 1280;
 
@@ -30,14 +31,13 @@ void draw()
 {
   translate(2, -104);
   rotateX(radians(30.9));
-  
-  fill(0, 100);
-  //noStroke();
-  strokeCap(ROUND);
+
+  fill(0, 300);
+  noStroke();
   rect(0, 0, width, height+20);
-  
+
   colorMode(HSB, 360);
-  spawnCount = 32;
+  spawnCount = 15;
 
 
   for (int num = 0; num < spawnCount; num ++)
@@ -72,8 +72,7 @@ void draw()
     if (p.pos.y > height) 
     {
       particles.remove(i);
-    } 
-    else if (hasCollision && p.deadTime() && Triggered) 
+    } else if (hasCollision && p.deadTime() && Triggered) 
     {
       particles.remove(i);
     }

@@ -6,7 +6,7 @@ class Particle
   float mass;
   color displayColor;
   float fallRate;
-  float splashSize = 0.8;
+  float splashSize = 1.0;
   int timeCount;
 
   Particle(float x, float y, float mass, color displayColor, float splashSize_) 
@@ -17,7 +17,7 @@ class Particle
     this.acc = new PVector(0, 0);
     this.mass = mass;
     this.displayColor = displayColor;
-    this.fallRate = map(this.mass, pMinMass, pMaxMass, 0.03, 0.10);
+    this.fallRate = map(this.mass, pMinMass, pMaxMass, 0.10, 0.20);
     this.timeCount = 0;
     this.splashSize = splashSize_;
   }
@@ -57,26 +57,35 @@ class Particle
         bounce.mult((mag+magAddition)*friction*dampening);
         this.vel = bounce;
 
-        if (this.mass > 3) {
+        if (this.mass > 2) {
           //this.mass = max(1, this.mass);
 
           for (int s = 0; s < splitCount; s++) {
             //float mass = max(2, this.mass-1);
-            color displayColor = color(random(0, 360), 360, 360, 360);
+            color displayColor = color(random(0, 360), 360, 360);
 
-            Particle splash = new Particle(this.pos.x, this.pos.y, 3, displayColor, splashSize_);
             Particle splash2 = new Particle(this.pos.x, this.pos.y, 2, color(254), splashSize_);
-
-            splash.vel = new PVector(this.vel.x, this.vel.y);
-            splash.vel.rotate(radians(random(-splashAngle, splashAngle)));
-            splash.vel.mult(random(0.2, 0.8));
-
             splash2.vel = new PVector(this.vel.x, this.vel.y);
             splash2.vel.rotate(radians(random(-56, 58)));
             splash2.vel.mult(random(0.3, 0.4));
-
-            particles.add(splash);
             particles.add(splash2);
+
+            if (!Triggered) {
+              Particle splash3 = new Particle(this.pos.x, this.pos.y, 2, color(random(150, 210), 360, 360), splashSize_);
+              splash3.vel = new PVector(this.vel.x, this.vel.y);
+              splash3.vel.rotate(radians(random(-30, 30)));
+              splash3.vel.mult(random(0.3, 0.4));
+              particles.add(splash3);
+            }
+
+            if (Triggered)
+            {
+              Particle splash = new Particle(this.pos.x, this.pos.y, 3, displayColor, splashSize_);
+              splash.vel = new PVector(this.vel.x, this.vel.y);
+              splash.vel.rotate(radians(random(-splashAngle, splashAngle)));
+              splash.vel.mult(random(0.2, 0.8));
+              particles.add(splash);
+            }
           }
         }
 

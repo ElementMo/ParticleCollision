@@ -57,7 +57,7 @@ class Particle
         bounce.mult((mag+magAddition)*friction*dampening);
         this.vel = bounce;
 
-        if (this.mass > 2) {
+        if (this.mass > 3) {
           //this.mass = max(1, this.mass);
 
           for (int s = 0; s < splitCount; s++) {

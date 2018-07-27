@@ -12,7 +12,7 @@ class Particle
   Particle(float x, float y, float mass, color displayColor, float splashSize_) 
   {
     this.pos = new PVector(x, y);
-    pOld = new PVector(pos.x, pos.y);
+    this.pOld = new PVector(pos.x, pos.y);
     this.vel = new PVector(0, 0);
     this.acc = new PVector(0, 0);
     this.mass = mass;
@@ -112,6 +112,7 @@ class Particle
     pg_A.stroke(displayColor);
     pg_A.line(this.pOld.x, this.pOld.y, this.pos.x, this.pos.y);
     //pg_A.point(this.pos.x, this.pos.y);
+
     pOld.set(pos);
     timeCount ++;
   }

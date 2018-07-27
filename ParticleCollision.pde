@@ -34,7 +34,8 @@ void setup()
   context = new DwPixelFlow(this);
   filter = new DwFilter(context);
   pg_A = (PGraphics2D) createGraphics(width, height, P2D);
-  pg_A.strokeCap(SQUARE);
+
+  spawnCount = 3;      //下雨程度
 }
 
 void draw()
@@ -50,7 +51,6 @@ void draw()
     pg_A.rect(0, 0, width, height+20);
 
     pg_A.colorMode(HSB, 360);
-    spawnCount = 2;      //下雨程度
 
 
     for (int num = 0; num < spawnCount; num ++)
@@ -83,7 +83,7 @@ void draw()
         hasCollision = p.resolveCollisions(0.6, 5, 2.0);  //彩色大粒子: 飞溅高度  飞溅角度  飞溅粒子大小
       } else
       {
-        hasCollision = p.resolveCollisions(0.35, 40, 1.0);//小水花: 飞溅高度  飞溅角度  飞溅粒子大小
+        hasCollision = p.resolveCollisions(0.35, 40, 1.5);//小水花: 飞溅高度  飞溅角度  飞溅粒子大小
       }
       p.display();
 
